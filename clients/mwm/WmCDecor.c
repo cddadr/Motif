@@ -206,13 +206,27 @@ void FrameExposureProc (ClientData *pcd)
 
     /* use "active" GCs if we have keyboard focus */
 
-    if (pcd == wmGD.keyboardFocus) {
-	topGC = CLIENT_APPEARANCE(pcd).activeTopShadowGC;
-	botGC = CLIENT_APPEARANCE(pcd).activeBottomShadowGC;
+    if (wmGD.frameStyle == WmRECESSED)
+    {
+        if (pcd == wmGD.keyboardFocus) {
+	    topGC = CLIENT_APPEARANCE(pcd).activeTopShadowGC;
+	    botGC = CLIENT_APPEARANCE(pcd).activeBottomShadowGC;
+        }
+        else {
+	    topGC = CLIENT_APPEARANCE(pcd).inactiveTopShadowGC;
+	    botGC = CLIENT_APPEARANCE(pcd).inactiveBottomShadowGC;
+        }
     }
-    else {
-	topGC = CLIENT_APPEARANCE(pcd).inactiveTopShadowGC;
-	botGC = CLIENT_APPEARANCE(pcd).inactiveBottomShadowGC;
+    else
+    {
+        if (pcd == wmGD.keyboardFocus) {
+            topGC = CLIENT_APPEARANCE(pcd).inactiveTopShadowGC;
+            botGC = CLIENT_APPEARANCE(pcd).inactiveBottomShadowGC;
+        }
+        else {
+            topGC = CLIENT_APPEARANCE(pcd).inactiveTopShadowGC;
+            botGC = CLIENT_APPEARANCE(pcd).inactiveBottomShadowGC;
+        }
     }
 
     /* draw the frame decoration */
@@ -1245,12 +1259,24 @@ void DrawWindowTitle (ClientData *pcd, Boolean eraseFirst)
     else 
     {
 	/* use "active" GC if we have keyboard focus */
-	if (pcd == wmGD.keyboardFocus) {
-	    clientGC = CLIENT_APPEARANCE(pcd).activeGC;
-	}
-	else {
-	    clientGC = CLIENT_APPEARANCE(pcd).inactiveGC;
-	}
+        if (wmGD.frameStyle == WmRECESSED)
+        {
+	    if (pcd == wmGD.keyboardFocus) {
+	        clientGC = CLIENT_APPEARANCE(pcd).activeGC;
+	    }
+	    else {
+	        clientGC = CLIENT_APPEARANCE(pcd).inactiveGC;
+	    }
+        }
+        else
+        {
+            if (pcd == wmGD.keyboardFocus) {
+                clientGC = CLIENT_APPEARANCE(pcd).inactiveGC;
+            }
+            else {
+                clientGC = CLIENT_APPEARANCE(pcd).inactiveGC;
+            }
+        }
 
 	/* get the area that the text must fit in */
 	GetTextBox (pcd, &textBox);
@@ -2120,17 +2146,35 @@ ShowActiveClientFrame (ClientData *pcd)
      * appropriate background color. 
      */
 
-    if (CLIENT_APPEARANCE(pcd).activeBackgroundPixmap)
+    if (wmGD.frameStyle == WmRECESSED)
     {
-	attr_mask |= CWBackPixmap;
-	window_attribs.background_pixmap =
-		CLIENT_APPEARANCE(pcd).activeBackgroundPixmap;
+        if (CLIENT_APPEARANCE(pcd).activeBackgroundPixmap)
+        {
+	    attr_mask |= CWBackPixmap;
+	    window_attribs.background_pixmap =
+		    CLIENT_APPEARANCE(pcd).activeBackgroundPixmap;
+        }
+        else
+        {
+	    attr_mask |= CWBackPixel;
+	    window_attribs.background_pixel = 
+		    CLIENT_APPEARANCE(pcd).activeBackground;
+        }
     }
     else
     {
-	attr_mask |= CWBackPixel;
-	window_attribs.background_pixel = 
-		CLIENT_APPEARANCE(pcd).activeBackground;
+        if (CLIENT_APPEARANCE(pcd).activeBackgroundPixmap)
+        {
+            attr_mask |= CWBackPixmap;
+            window_attribs.background_pixmap =
+                    CLIENT_APPEARANCE(pcd).backgroundPixmap;
+        }
+        else
+        {
+            attr_mask |= CWBackPixel;
+            window_attribs.background_pixel =
+                    CLIENT_APPEARANCE(pcd).background;
+        }
     }
 
 
@@ -2687,8 +2731,8 @@ Boolean DepressGadget (ClientData *pcd, int gadget, Boolean depressed)
     {
 	/* use "active" GCs if we have keyboard focus */
 	if (pcd == wmGD.keyboardFocus) {
-	    topGC = CLIENT_APPEARANCE(pcd).activeTopShadowGC;
-	    botGC = CLIENT_APPEARANCE(pcd).activeBottomShadowGC;
+	    topGC = CLIENT_APPEARANCE(pcd).inactiveTopShadowGC;
+	    botGC = CLIENT_APPEARANCE(pcd).inactiveBottomShadowGC;
 	}
 	else {
 	    topGC = CLIENT_APPEARANCE(pcd).inactiveTopShadowGC;
