@@ -1140,38 +1140,35 @@ void GetTextBox (ClientData *pcd, XRectangle *pBox)
 	      WM_TOP_TITLE_PADDING + WM_BOTTOM_TITLE_PADDING;
 
 #ifdef DT_LEFT_JUSTIFIED_TITLE
-    if (wmGD.frameStyle == WmSLAB)
+    /*
+     * We left justify the title in this style.
+     * To keep it a little neat, we offset the title from 
+     * the left edge just a little (half the title height).
+     * See if we have room to do this.
+     */
+    if (DECOUPLE_TITLE_APPEARANCE(pcd))
+        fontList = CLIENT_TITLE_APPEARANCE(pcd).fontList;
+    else
+        fontList = CLIENT_APPEARANCE(pcd).fontList;
+    textWidth = XmStringWidth(fontList, pcd->clientTitle);
+
+    offset = TitleBarHeight(pcd)/2;
+
+    if ((textWidth + offset) <= width)
     {
-	/*
-	 * We left justify the title in this style.
-	 * To keep it a little neat, we offset the title from 
-	 * the left edge just a little (half the title height).
-	 * See if we have room to do this.
-	 */
-	if (DECOUPLE_TITLE_APPEARANCE(pcd))
-	    fontList = CLIENT_TITLE_APPEARANCE(pcd).fontList;
-	else
-	    fontList = CLIENT_APPEARANCE(pcd).fontList;
-	textWidth = XmStringWidth(fontList, pcd->clientTitle);
-
-	offset = TitleBarHeight(pcd)/2;
-
-	if ((textWidth + offset) <= width)
-	{
-	    /* We have plenty of room, do the offset */
-	    x += offset;
-	    width -= offset;
-	}
-	else if ((short) (width - textWidth) > 0)
-	{
-	    /* We don't have enough room to do our usual offset,
-	     * but if we reduce the offset, the text won't get
-	     * clipped.
-	     */
-	    offset = (width - textWidth) / 2;
-	    x += offset;
-	    width -= offset;
-	}
+        /* We have plenty of room, do the offset */
+        x += offset;
+        width -= offset;
+    }
+    else if ((short) (width - textWidth) > 0)
+    {
+        /* We don't have enough room to do our usual offset,
+         * but if we reduce the offset, the text won't get
+         * clipped.
+         */
+        offset = (width - textWidth) / 2;
+        x += offset;
+        width -= offset;
     }
 
 #endif /* DT_LEFT_JUSTIFIED_TITLE */
@@ -1271,7 +1268,7 @@ void DrawWindowTitle (ClientData *pcd, Boolean eraseFirst)
 #ifdef  DT_LEFT_JUSTIFIED_TITLE
     WmDrawXmString(DISPLAY, win, fontList, pcd->clientTitle, clientGC,
 		   textBox.x, textBox.y, textBox.width, &textBox,
-		   ((wmGD.frameStyle == WmSLAB) ? False : True));
+		   False);
 #else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     WmDrawXmString(DISPLAY, win, fontList, pcd->clientTitle, clientGC,
