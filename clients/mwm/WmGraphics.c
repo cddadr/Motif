@@ -1131,15 +1131,26 @@ void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 #endif /* DT_LEFT_JUSTIFIED_TITLE */
 {
     Dimension textWidth;
+#ifdef DT_LEFT_JUSTIFIED_TITLE
+    int alignment;
+#else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     int alignment;
 #else /* WSM */
     int alignment = XmALIGNMENT_BEGINNING;
 #endif /* WSM */
+#endif /* DT_LEFT_JUSTIFIED_TITLE */
     
 
     textWidth = XmStringWidth(xmfontlist, xmstring);
+#ifdef DT_LEFT_JUSTIFIED_TITLE
+    alignment = bCenter ? XmALIGNMENT_CENTER : XmALIGNMENT_BEGINNING;
 
+    if (textWidth >= pbox->width)  /* can't center text if no room */
+    {                              /* left justify & clip text */
+        alignment = XmALIGNMENT_BEGINNING;
+    }
+#else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     alignment = bCenter ? XmALIGNMENT_CENTER : XmALIGNMENT_BEGINNING;
 
@@ -1156,6 +1167,7 @@ void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 	alignment = XmALIGNMENT_BEGINNING;
     }
 #endif /* WSM */
+#endif /* DT_LEFT_JUSTIFIED_TITLE */
     
     if (ACTIVE_PSD->cleanText)
     {
