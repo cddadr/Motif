@@ -907,7 +907,7 @@ void DrawIconTitle (ClientData *pcd)
 #ifdef DT_LEFT_JUSTIFIED_TITLE
     WmDrawXmString(DISPLAY, ICON_FRAME_WIN(pcd), ICON_APPEARANCE(pcd).fontList,
                    pcd->iconTitle, iconGC,
-                   textBox.x, textBox.y, textBox.width, &textBox, False);
+                   textBox.x+2, textBox.y, textBox.width, &textBox, False);
 #else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     WmDrawXmString(DISPLAY, ICON_FRAME_WIN(pcd), ICON_APPEARANCE(pcd).fontList,
@@ -1006,7 +1006,7 @@ void RedisplayIconTitle (ClientData *pcd)
         WmDrawXmString(DISPLAY, ICON_FRAME_WIN(pcd),
                        ICON_APPEARANCE(pcd).fontList,
                        pcd->iconTitle, iconGC,
-                       textBox.x, textBox.y, textBox.width, &textBox,
+                       textBox.x+2, textBox.y, textBox.width, &textBox,
                        False);
 #else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
@@ -1859,7 +1859,7 @@ void PaintActiveIconText (ClientData *pcd, Boolean erase)
     WmDrawXmString(DISPLAY, pcd->pSD->activeIconTextWin,
                    ICON_APPEARANCE(pcd).fontList,
                    pcd->iconTitle, iconGC,
-                   textBox.x, textBox.y, textBox.width, &textBox, False);
+                   textBox.x+2, textBox.y, textBox.width, &textBox, False);
 #else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     WmDrawXmString(DISPLAY, pcd->pSD->activeIconTextWin, 
