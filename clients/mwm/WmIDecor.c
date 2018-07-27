@@ -904,6 +904,11 @@ void DrawIconTitle (ClientData *pcd)
 
 
     /* paint the text */
+#ifdef DT_LEFT_JUSTIFIED_TITLE
+    WmDrawXmString(DISPLAY, ICON_FRAME_WIN(pcd), ICON_APPEARANCE(pcd).fontList,
+                   pcd->iconTitle, iconGC,
+                   textBox.x, textBox.y, textBox.width, &textBox, False);
+#else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     WmDrawXmString(DISPLAY, ICON_FRAME_WIN(pcd), ICON_APPEARANCE(pcd).fontList,
 		   pcd->iconTitle, iconGC, 
@@ -913,6 +918,7 @@ void DrawIconTitle (ClientData *pcd)
 		   pcd->iconTitle, iconGC, 
 		   textBox.x, textBox.y, textBox.width, &textBox);
 #endif /* WSM */
+#endif /* DT_LEFT_JUSTIFIED_TITLE */
 
 } /* END OF FUNCTION DrawIconTitle */
 
@@ -996,6 +1002,13 @@ void RedisplayIconTitle (ClientData *pcd)
 	    FALSE);
 
 	/* in with the new */
+#ifdef DT_LEFT_JUSTIFIED_TITLE
+        WmDrawXmString(DISPLAY, ICON_FRAME_WIN(pcd),
+                       ICON_APPEARANCE(pcd).fontList,
+                       pcd->iconTitle, iconGC,
+                       textBox.x, textBox.y, textBox.width, &textBox,
+                       False);
+#else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
 	WmDrawXmString(DISPLAY, ICON_FRAME_WIN(pcd), 
 		       ICON_APPEARANCE(pcd).fontList,
@@ -1008,6 +1021,7 @@ void RedisplayIconTitle (ClientData *pcd)
 		       pcd->iconTitle, iconGC, 
 		       textBox.x, textBox.y, textBox.width, &textBox);
 #endif /* WSM */
+#endif /* DT_LEFT_JUSTIFIED_TITLE */
 
 	/* 
 	 * Erase & paint text in the active icon text window
@@ -1841,6 +1855,12 @@ void PaintActiveIconText (ClientData *pcd, Boolean erase)
 		    FALSE);
     }
 
+#ifdef DT_LEFT_JUSTIFIED_TITLE
+    WmDrawXmString(DISPLAY, pcd->pSD->activeIconTextWin,
+                   ICON_APPEARANCE(pcd).fontList,
+                   pcd->iconTitle, iconGC,
+                   textBox.x, textBox.y, textBox.width, &textBox, False);
+#else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     WmDrawXmString(DISPLAY, pcd->pSD->activeIconTextWin, 
 		   ICON_APPEARANCE(pcd).fontList,
@@ -1852,6 +1872,7 @@ void PaintActiveIconText (ClientData *pcd, Boolean erase)
 		   pcd->iconTitle, iconGC, 
 		   textBox.x, textBox.y, textBox.width, &textBox);
 #endif /* WSM */
+#endif /* DT_LEFT_JUSTIFIED_TITLE */
 
 
 } /* END OF FUNCTION PaintActiveIconText */

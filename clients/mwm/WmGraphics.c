@@ -1114,6 +1114,11 @@ void WmDrawString (Display *dpy, Drawable d, GC gc, int x, int y, char *string, 
  *    B/W displays.
  *			
  *************************************<->***********************************/
+#ifdef DT_LEFT_JUSTIFIED_TITLE
+void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
+                     XmString xmstring, GC gc, Position x, Position y,
+                     Dimension width,  XRectangle *pbox, Boolean bCenter)
+#else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
 void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist, 
 		     XmString xmstring, GC gc, Position x, Position y, 
@@ -1123,6 +1128,7 @@ void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 		     XmString xmstring, GC gc, Position x, Position y, 
 		     Dimension width,  XRectangle *pbox)
 #endif /* WSM */
+#endif /* DT_LEFT_JUSTIFIED_TITLE */
 {
     Dimension textWidth;
 #ifdef WSM

@@ -1106,11 +1106,17 @@ void GetTextBox (ClientData *pcd, XRectangle *pBox)
 {
     int x,y;
     unsigned int width,height;
+#ifdef DT_LEFT_JUSTIFIED_TITLE
+    Dimension textWidth;
+    Dimension offset;
+    XmFontList  fontList;
+#else /* DT_LEFT_JUSTIFIED_TITLE */
 #ifdef WSM
     Dimension textWidth;
     Dimension offset;
     XmFontList  fontList;
 #endif /* WSM */
+#endif /* DT_LEFT_JUSTIFIED_TITLE */
 
     /* get size of title area */
 
@@ -1271,10 +1277,10 @@ void DrawWindowTitle (ClientData *pcd, Boolean eraseFirst)
     WmDrawXmString(DISPLAY, win, fontList, pcd->clientTitle, clientGC,
 		   textBox.x, textBox.y, textBox.width, &textBox,
 		   True);
-#else
+#else /* WSM */
     WmDrawXmString(DISPLAY, win, fontList, pcd->clientTitle, clientGC,
 		   textBox.x, textBox.y, textBox.width, &textBox);
-#endif
+#endif /* WSM */
 #endif /* DT_LEFT_JUSTIFIED_TITLE */
 		     
 
